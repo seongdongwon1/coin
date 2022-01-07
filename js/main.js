@@ -4,8 +4,7 @@ var check_list = [
 
 $(document).ready(function ()
 {
-    make_symb_master();
-
+    first_switch_check();
 });
 
 
@@ -18,13 +17,13 @@ function make_symb_master()
         {
             data = JSON.parse(data);
             make_select_symb_area(data);
+            make_use_symb_area(data);
         }
     })
 }
 
 function make_select_symb_area(data)
 {
-    console.log('dataa', data);
     var select_area = $('.select-symbol');
     var all_data = data['all'];
     var check_data = data['use'];
@@ -69,9 +68,9 @@ function make_select_symb_area(data)
         }
         else
         {
-            if(check_list.length === 9)
+            if(check_list.length === 8)
             {
-                alert('시간 특성상 최대 9개까지만');
+                alert('시간 특성상 최대 8개까지만');
             }
             else
             {
@@ -83,11 +82,55 @@ function make_select_symb_area(data)
     })
 }
 
+function make_use_symb_area(data)
+{   
+    console.log('data', data);
+    var use_symb_area = $('.use-border');
+    for(var i=0; i<data['use'].length; i++)
+    {
+        var str = 
+            '<div class="items '+data['use'][i]['english_name']+'">\
+                <div class="top">\
+                    <div class="name">\
+                        '+data['use'][i]['korean_name']+'\
+                    </div>\
+                    <div class="exit">X</div>\
+                </div>\
+                <h4 class="line"></h4>\
+                <div class="bottom">\
+                </div>\
+            </div>';
+        use_symb_area.append(str);
+    }
 
+    make_use_symb_bottom_area();
+}
 
+function make_use_symb_bottom_area()
+{
 
+}
 
-
+function first_switch_check()
+{
+    $.ajax({
+        url : "./../api/check_switch.php",
+        type : "GET",
+        success : function (data)
+        {
+            if(data === "on")
+            {
+                var check = $("input[type='checkbox']");
+                check.click();
+                make_symb_master();
+            }
+            else
+            {
+                console.log('off');
+            }
+        }
+    })
+}
 
 
 

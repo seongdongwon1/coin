@@ -38,11 +38,17 @@
                     </div>
                 </div>
             </div>
+            <div class="mid-area-use">
+                <div class="use-border">
+
+                </div>
+            </div>
         </div>
         <div class="bottom"></div>
         <script>
             var check = $("input[type='checkbox']");
             check.click(function(){
+                console.log('check', check);
             	$("p").toggle();
                 start_get_data();
             });
