@@ -9,7 +9,6 @@
     header('Content-type: text/html; charset=UTF-8');
 
     $symb = file_get_contents("https://api.upbit.com/v1/market/all");
-    // $symb = $_POST['symb'];
     $symb = json_decode($symb, true);
     for($i=0; $i<count($symb); $i++)
     {

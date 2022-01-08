@@ -22,11 +22,7 @@
             <div class="top-area">
                 Coin Viewer - created by SD
                 <div class="toggle">
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                    <p>OFF</p><p style="display:none;">ON</p>
+                    <button type="button" class="data-get" style="cursor : pointer">데이터 받기</button>
                 </div>
             </div> 
         </div>
@@ -45,13 +41,5 @@
             </div>
         </div>
         <div class="bottom"></div>
-        <script>
-            var check = $("input[type='checkbox']");
-            check.click(function(){
-                console.log('check', check);
-            	$("p").toggle();
-                start_get_data();
-            });
-        </script>
     </body>
 </html>

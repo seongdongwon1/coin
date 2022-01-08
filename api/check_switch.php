@@ -9,20 +9,22 @@
 
     header('Content-type: text/html; charset=UTF-8');
 
+    $check_switch = $_GET['button'];
+
     $sql = "select * from dataon;";
     $result = $db->query($sql);
     $tmp = $result->fetch_array(MYSQLI_ASSOC);
     $now_date = date("Y-m-d H:i:s");
     $half_date = date("Y-m-d H:i:s", strtotime($now_date. "-12 hours"));
     
-    if(strtotime($tmp['last_updt']) < strtotime($half_date))
+    if($check_switch === "0")
     {
-        $sql = "UPDATE `dataon` SET onkey = 0;";
-        $db->query($sql);
-        echo "off";
+        echo "on";
     }
     else
     {
-        echo "on";
+        // $sql = "UPDATE `dataon` SET onkey = 0;";
+        // $db->query($sql);
+        echo "off";
     }
 ?>

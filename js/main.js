@@ -1,12 +1,30 @@
 var check_list = [
 
-]
+];
+
+var switch_man = 0;
 
 $(document).ready(function ()
 {
-    first_switch_check();
+    var data_on_button = $('.data-get');
+    data_on_button.on('click', function()
+    {
+        if(switch_man === 0)
+        {
+            //데이터 받기
+            make_symb_master();
+            data_on_button.html('데이터 받는 중');
+            switch_man = 1;
+        }
+        else
+        {
+            //데이터 끄기
+            data_on_button.html('데이터 받기');
+            switch_man = 0;
+        }
+    })
+    
 });
-
 
 function make_symb_master()
 {
@@ -84,8 +102,8 @@ function make_select_symb_area(data)
 
 function make_use_symb_area(data)
 {   
-    console.log('data', data);
     var use_symb_area = $('.use-border');
+    use_symb_area.empty();
     for(var i=0; i<data['use'].length; i++)
     {
         var str = 
@@ -102,8 +120,8 @@ function make_use_symb_area(data)
             </div>';
         use_symb_area.append(str);
     }
-
-    make_use_symb_bottom_area();
+    get_use_symb(data['use']);
+    //make_use_symb_bottom_area();
 }
 
 function make_use_symb_bottom_area()
@@ -111,30 +129,19 @@ function make_use_symb_bottom_area()
 
 }
 
-function first_switch_check()
+function get_use_symb(use)
 {
     $.ajax({
-        url : "./../api/check_switch.php",
-        type : "GET",
-        success : function (data)
+        url : './../api/get_use_symbol.php',
+        type : 'get',
+        data : {
+            data : use
+        },success : function (data)
         {
-            if(data === "on")
-            {
-                var check = $("input[type='checkbox']");
-                check.click();
-                make_symb_master();
-            }
-            else
-            {
-                console.log('off');
-            }
+            console.log('dataaa', data);
         }
     })
 }
-
-
-
-
 
 function makearea222()
 {
@@ -276,7 +283,6 @@ function get_data_coin()
     // });
     // var obj = JSON.parse(request.responseText);
     // console.log(obj);
-    console.log('g_symb', g_symb);
     for(var i=0; i<g_symb.length; i++)
     {
         for(var j=0; j<g_time.length; j++)
@@ -287,7 +293,6 @@ function get_data_coin()
             request.open("GET", url, false);
             request.send();
             var dd = JSON.parse(request.responseText);
-            console.log('dd', dd);
             $.ajax({
                 url : "./../api/data_insert.php",
                 type : "post",
