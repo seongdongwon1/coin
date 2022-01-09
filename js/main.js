@@ -48,7 +48,7 @@ function make_select_symb_area(data)
     for(var i=0; i<all_data.length; i++)
     {
         var str = 
-            '<div class="items '+all_data[i]['english_name'].replace(/(\s*)/g, "")+'" data-check="'+all_data[i]['english_name'].replace(/(\s*)/g, "")+'">\
+            '<div class="items '+all_data[i]['english_name'].replace(/(\s*)/g, "")+'" data-symb="'+all_data[i]['symb']+'" data-check="'+all_data[i]['english_name'].replace(/(\s*)/g, "")+'">\
                 '+all_data[i]['korean_name']+'\
             </div>\
             ';
@@ -58,12 +58,16 @@ function make_select_symb_area(data)
     for(var i=0; i<check_data.length; i++)
     {
         var symb = check_data[i]['english_name'].replace(/(\s*)/g, "");
+        var key_symb = check_data[i]['symb'];
         $('.'+symb+'').addClass('check-active');
-        check_list.push(symb);
+        //check_list.push([symb, key_symb]);
+        check_list.push(key_symb);
+
     }
     $('.select-symbol .items').click(function ()
     {
-        var check_bol = check_list.includes($(this).data('check'));
+        var check_bol = check_list.includes($(this).data('symb'));
+        console.log('check_bol', check_bol);
         if(check_bol === true)
         {   
             if(check_list.length === 1)
@@ -74,13 +78,15 @@ function make_select_symb_area(data)
             {
                 for(var j=0; j<check_list.length; j++) 
                 {
-                    if(check_list[j] === $(this).data('check'))  
+                    if(check_list[j] === $(this).data('symb'))  
                     {
                         check_list.splice(j, 1);
                         j--;
                     }
                 }
                 $(this).removeClass('check-active');
+                user_add_symbol();
+
                 //data restart
             }
         }
@@ -93,10 +99,13 @@ function make_select_symb_area(data)
             else
             {
                 $(this).addClass('check-active');
-                check_list.push($(this).data('check'));
+                //check_list.push([$(this).data('check'), $(this).data('symb')]);
+                check_list.push($(this).data('symb'));
+                user_add_symbol();
                 //data restart
             }
         }
+        console.log('check_list', check_list);
     })
 }
 
@@ -126,7 +135,7 @@ function make_use_symb_area(data)
 
 function make_use_symb_bottom_area()
 {
-
+    
 }
 
 function get_use_symb(use)
@@ -138,10 +147,38 @@ function get_use_symb(use)
             data : use
         },success : function (data)
         {
-            console.log('dataaa', data);
+            //console.log('dataaa', data);
+            make_use_symb_bottom_area();
         }
     })
 }
+
+function user_add_symbol()
+{
+    var click_symb = check_list;
+    $.ajax({
+        url : './../api/user_add_symbol.php',
+        type : "get",
+        data : {
+            data : click_symb
+        },success : function (respon)
+        {
+            //console.log('respon', respon);
+        }
+    })
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 function makearea222()
 {
