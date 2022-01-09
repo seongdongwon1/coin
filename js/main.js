@@ -133,9 +133,9 @@ function make_use_symb_area(data)
     //make_use_symb_bottom_area();
 }
 
-function make_use_symb_bottom_area()
+function make_use_symb_bottom_area(data)
 {
-    
+    console.log('data', data);
 }
 
 function get_use_symb(use)
@@ -147,8 +147,9 @@ function get_use_symb(use)
             data : use
         },success : function (data)
         {
-            //console.log('dataaa', data);
-            make_use_symb_bottom_area();
+            data = JSON.parse(data);
+            console.log('data', data);
+            make_use_symb_bottom_area(data);
         }
     })
 }

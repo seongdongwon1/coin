@@ -16,7 +16,6 @@
     for($i=0; $i<count($symb); $i++)
     {
         $user = $symb[$i];
-        print_r($user);
         $sql = "UPDATE `krw_master` SET use_yn = 1 WHERE symb='".$user."'";
         $db->query($sql);
     }
