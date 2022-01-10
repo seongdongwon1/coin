@@ -1,5 +1,7 @@
 <?php
     require_once('./connect_coin.php');
+    require_once('./func.php');
+
 
     error_reporting( E_ALL);
     ini_set( "display_errors", 1 );
@@ -8,28 +10,55 @@
     date_default_timezone_set('Asia/Seoul');
 
     header('Content-type: text/html; charset=UTF-8');
-
+    
     $use_symb = $_GET['data'];
 
+    $cul = [
+        'one_two',
+        'two_three',
+        'three_four',
+        'four_five',
+        'five_six',
+        'six_seven',
+        'seven_eight',
+        'eight_nine',
+        'nine_ten',
+        'ten_eleven',
+        'eleven_twelve',
+        'twelve_thirteen',
+    ];
     for($i=0; $i<count($use_symb); $i++)
     {
         $code = file_get_contents("https://api.upbit.com/v1/ticker?markets=".$use_symb[$i]['symb']."");
         $code = json_decode($code, true);
         $now_date = date("Y-m-d H:i");
 
-        $sql = "SELECT * FROM `data_5m` WHERE symb='".$use_symb[$i]['symb']."' order by date desc limit 13";
+        $sql = "SELECT * FROM `data_5m` WHERE symb='".$use_symb[$i]['symb']."' order by last_updt desc limit 12";
         $result =  $db->query($sql);
         if($result->num_rows > 0)
         {
-            $tmp = $result->fetch_array(MYSQLI_ASSOC);
-            //$json = json_encode($tmp, JSON_UNESCAPED_UNICODE);
-            print_r($code[0]['trade_price']);
-            echo "\n";
-            $ahead = $tmp['price'];
-            $now = $code[0]['trade_price'];
-            $sum = $now - $ahead;
-            print_r($sum);
-            echo "\n";
+            $arr = array();
+            while($tmp = $result->fetch_array(MYSQLI_ASSOC))
+            {
+                $arr[] = $tmp;
+            }
+            for($j=0; $j<count($arr); $j++)
+            {
+                $compare = $arr[$j]['price'];
+                $now = $code[0]['trade_price'];
+                $sum = $now - $compare;
+                if($j === 0)
+                {
+                    $sql = "INSERT INTO `data_5m` (symb, `date`, price, one_two) VALUE ('".$code[0]['market']."', '".$now_date."', '".$now."', '".$sum."')";
+                    $db->query($sql);
+                }
+                else
+                {
+                    $sql = "UPDATE `data_5m` SET `".$cul[$j]."` = '".$sum."' WHERE symb = '".$use_symb[$i]['symb']."' order by last_updt desc limit 1";
+                    $db->query($sql);
+                    
+                }
+            }
         }
         else
         {
