@@ -31,78 +31,47 @@
     {
         $code = file_get_contents("https://api.upbit.com/v1/ticker?markets=".$use_symb[$i]['symb']."");
         $code = json_decode($code, true);
-        $now_date = date("Y-m-d H:i");
+        $now_date = date("Y-m-d H:i:s");
+        // 1. 먼저 최신데이터 무조건 받아옴.
+        // 2. 어차피 기준은 하나 이기 때문에 하나의 데이터만 제공해주면 됨.
+        $sql = "INSERT INTO `data_5m` (symb, `date`, price) VALUE ('".$code[0]['market']."', '".$now_date."', '".$code[0]['trade_price']."')";
+        $db->query($sql);
 
-        $sql = "SELECT * FROM `data_5m` WHERE symb='".$use_symb[$i]['symb']."' order by last_updt desc limit 12";
-        $result =  $db->query($sql);
-        if($result->num_rows > 0)
+        $sql2 = "SELECT * FROM `data_5m` WHERE symb='".$use_symb[$i]['symb']."' order by `date` desc limit 13";
+        $result = $db->query($sql2);
+        $arr = array();
+        while($tmp = $result->fetch_array(MYSQLI_ASSOC))
         {
-            $arr = array();
-            while($tmp = $result->fetch_array(MYSQLI_ASSOC))
-            {
-                $arr[] = $tmp;
-            }
-            for($j=0; $j<count($arr); $j++)
-            {
-                $compare = $arr[$j]['price'];
-                $now = $code[0]['trade_price'];
-                $sum = $now - $compare;
-                if($j === 0)
-                {
-                    $sql = "INSERT INTO `data_5m` (symb, `date`, price, one_two) VALUE ('".$code[0]['market']."', '".$now_date."', '".$now."', '".$sum."')";
-                    $db->query($sql);
-                }
-                else
-                {
-                    $sql = "UPDATE `data_5m` SET `".$cul[$j]."` = '".$sum."' WHERE symb = '".$use_symb[$i]['symb']."' order by last_updt desc limit 1";
-                    $db->query($sql);
-                    
-                }
-            }
+            $arr[] = $tmp;
         }
-        else
+        $arr = array_reverse($arr);
+        $import_symb = $arr[0]['price'];
+        $symb_name = $arr[0]['symb'];
+        $symb_date = $arr[0]['date'];
+        for($j=1; $j<count($arr); $j++)
         {
-            $sql="INSERT INTO `data_5m` (symb, `date`, price) VALUE 
-                    ('".$code[0]['market']."', '".$now_date."', '".$code[0]['trade_price']."')";
-            $result = $db->query($sql);
+            $compare_price = $arr[$j]['price'];
+            $sum = $compare_price - $import_symb;
+            $sql3 = "UPDATE `data_5m` SET `".$cul[$j-1]."` = $sum WHERE symb='".$symb_name."' and `date` = '".$symb_date."'";
+            $db->query($sql3);
         }
     }
 
-    // $send_data = array();
-    // for($i=0; $i<count($use_symb); $i++)
-    // {
-    //     $sql = "SELECT * FROM `data_5m` WHERE symb = '".$use_symb[$i]['symb']."' order by date asc;";
-    //     $result = $db->query($sql);
-    //     $arr = array();
-    //     while($tmp = $result->fetch_array(MYSQLI_ASSOC))
-    //     {
-	//     	$arr[] = $tmp;
-	//     }
-    //     //$json = json_encode($arr, JSON_UNESCAPED_UNICODE);
-    //     array_push($send_data, $arr);
-    //     $result->free();
-    // }
-    
-    // for($i=0; $i<count($send_data[0]); $i++)
-    // {
-    //     $symb = $send_data[0][$i];
-    //     for($j=0; $j<count($symb); $j++)
-    //     {
-    //         $price = $symb[$j]['price'];
-    //         for($z=0; $z<count($symb);)
-    //     }
-    // }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // $json = json_encode($send_data, JSON_UNESCAPED_UNICODE);
-    // echo $json;
-    mysqli_close($db);
+    $send_arr = array();
+    for($i=0; $i<count($use_symb); $i++)
+    {
+        $sql2 = "SELECT * FROM `data_5m` WHERE symb='".$use_symb[$i]['symb']."' order by `date` desc limit 13";
+        $result = $db->query($sql2);
+        $arr = array();
+        while($tmp = $result->fetch_array(MYSQLI_ASSOC))
+        {
+            $arr[] = $tmp;
+        }
+        $arr = array_reverse($arr);
+        $send_arr[$arr[0]['symb']] = $arr[0];
+    }
+    $json = json_encode($send_arr, JSON_UNESCAPED_UNICODE);
 
+    mysqli_close($db);
+    echo $json;
 ?>

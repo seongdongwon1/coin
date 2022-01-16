@@ -116,7 +116,7 @@ function make_use_symb_area(data)
     for(var i=0; i<data['use'].length; i++)
     {
         var str = 
-            '<div class="items '+data['use'][i]['english_name']+'">\
+            '<div class="items '+data['use'][i]['symb']+'">\
                 <div class="top">\
                     <div class="name">\
                         '+data['use'][i]['korean_name']+'\
@@ -135,6 +135,8 @@ function make_use_symb_area(data)
 
 function make_use_symb_bottom_area(data)
 {
+    //2022.01.16 여기서부터 이제 데이터 영역 꾸리면 됨.
+    
     console.log('data', data);
 }
 

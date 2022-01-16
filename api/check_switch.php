@@ -23,8 +23,6 @@
     }
     else
     {
-        // $sql = "UPDATE `dataon` SET onkey = 0;";
-        // $db->query($sql);
         echo "off";
     }
 ?>
