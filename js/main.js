@@ -2,6 +2,20 @@ var check_list = [
 
 ];
 
+var compare_list = [
+    'one_two',
+    'two_three',
+    'three_four',
+    'four_five',
+    'five_six',
+    'six_seven',
+    'seven_eight',
+    'eight_nine',
+    'nine_ten',
+    'ten_eleven',
+    'eleven_twelve',
+    'twelve_thirteen'
+];
 var switch_man = 0;
 
 $(document).ready(function ()
@@ -11,6 +25,8 @@ $(document).ready(function ()
     {
         if(switch_man === 0)
         {
+            //데이터 체크 (12시간 전 데이터 삭제)
+            data_clean();
             //데이터 받기
             make_symb_master();
             data_on_button.html('데이터 받는 중');
@@ -25,6 +41,18 @@ $(document).ready(function ()
     })
     
 });
+
+function data_clean()
+{
+    $.ajax({
+        url : "./../api/data_clean.php",
+        type : "get",
+        success : function (data)
+        {
+            console.log(data);
+        }
+    })
+}
 
 function make_symb_master()
 {
@@ -67,7 +95,6 @@ function make_select_symb_area(data)
     $('.select-symbol .items').click(function ()
     {
         var check_bol = check_list.includes($(this).data('symb'));
-        console.log('check_bol', check_bol);
         if(check_bol === true)
         {   
             if(check_list.length === 1)
@@ -105,7 +132,6 @@ function make_select_symb_area(data)
                 //data restart
             }
         }
-        console.log('check_list', check_list);
     })
 }
 
@@ -125,6 +151,15 @@ function make_use_symb_area(data)
                 </div>\
                 <h4 class="line"></h4>\
                 <div class="bottom">\
+                    <table>\
+                        <thead>\
+                            <tr>\
+                                <th>시간</th>\
+                                <th>가격</th>\
+                                <th>등락률</th>\
+                            </tr>\
+                        </thead>\
+                    </table>\
                 </div>\
             </div>';
         use_symb_area.append(str);
@@ -137,9 +172,14 @@ function make_use_symb_bottom_area(data)
 {
     //2022.01.16 여기서부터 이제 데이터 영역 꾸리면 됨.
     
-    console.log('data', data);
+    for(value in data)
+    {
+        for(var i=0; i<compare_list.length; i++)
+        {
+            console.log('count', data[value][i]);
+        }
+    }
 }
-
 function get_use_symb(use)
 {
     $.ajax({
@@ -150,7 +190,6 @@ function get_use_symb(use)
         },success : function (data)
         {
             data = JSON.parse(data);
-            console.log('data', data);
             make_use_symb_bottom_area(data);
         }
     })
