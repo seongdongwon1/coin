@@ -51,7 +51,8 @@
         for($j=1; $j<count($arr); $j++)
         {
             $compare_price = $arr[$j]['price'];
-            $sum = $compare_price - $import_symb;
+            $sum = (($compare_price - $import_symb) / $import_symb) *100;
+            $sum = number_format($sum, 2);
             $sql3 = "UPDATE `data_5m` SET `".$cul[$j-1]."` = $sum WHERE symb='".$symb_name."' and `date` = '".$symb_date."'";
             $db->query($sql3);
         }
@@ -68,9 +69,10 @@
             $arr[] = $tmp;
         }
         $arr = array_reverse($arr);
-        $send_arr[$arr[0]['symb']] = $arr[0];
+        $send_arr[$arr[0]['symb']] = $arr;
     }
     $json = json_encode($send_arr, JSON_UNESCAPED_UNICODE);
+    //$json = json_encode($arr, JSON_UNESCAPED_UNICODE);
 
     mysqli_close($db);
     echo $json;

@@ -149,7 +149,7 @@ body
 .mid .mid-area-use .use-border .items
 {
     width: 340px;
-    height: 800px;
+    height: 650px;
     border: 3px solid #142c67;
     border-radius: 10px;
     margin: 1px;
@@ -158,7 +158,7 @@ body
 
 .mid .mid-area-use .use-border .items .top
 {
-    width : 340px;
+    width : 100%;
     height : 70px;
     display : flex;
 }
@@ -199,8 +199,61 @@ body
 
 .mid .mid-area-use .use-border .items .bottom
 {
-    width : 340px;
+    width : 100%;
     height : 730px;
+}
+
+.mid .mid-area-use .use-border .items .bottom table
+{
+    width : 100%;
+    height : 30px;
+}
+
+.mid .mid-area-use .use-border .items .bottom table thead
+{
+    width : 100%;
+    height : 100%;
+}
+
+.mid .mid-area-use .use-border .items .bottom table thead .time
+{
+    width : 50%;
+    height : 30px;
+}
+
+.mid .mid-area-use .use-border .items .bottom table thead th
+{
+    width : 25%;
+    height : 30px;
+    border : 1px solid;
+    text-align: center;
+    font-size: 14px;
+    background-color : yellow;
+}
+
+.mid .mid-area-use .use-border .items .bottom table tbody th
+{
+    font-size : 14px;
+    height : 40px;
+    text-align: center;
+    border : 1px solid;
+}
+
+.mid .mid-area-use .use-border .items .bottom table tbody .imp_line
+{
+    background-color : #142c67;
+    color : white;
+    font-weight: 600;
+}
+
+.mid .mid-area-use .use-border .items .bottom table tbody tr .up
+{
+    background-color: red;
+}
+
+.mid .mid-area-use .use-border .items .bottom table tbody tr .down
+{
+    background-color: blue;
 }
 
 /* bottom */

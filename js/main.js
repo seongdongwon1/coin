@@ -154,7 +154,7 @@ function make_use_symb_area(data)
                     <table>\
                         <thead>\
                             <tr>\
-                                <th>시간</th>\
+                                <th class="time">시간</th>\
                                 <th>가격</th>\
                                 <th>등락률</th>\
                             </tr>\
@@ -169,15 +169,78 @@ function make_use_symb_area(data)
 }
 
 function make_use_symb_bottom_area(data)
-{
+{   
+    console.log('data', data);
     //2022.01.16 여기서부터 이제 데이터 영역 꾸리면 됨.
-    
-    for(value in data)
+    for(var i in data)
     {
-        for(var i=0; i<compare_list.length; i++)
-        {
-            console.log('count', data[value][i]);
-        }
+        var symb = data[i][0]['symb'];
+        var symb_area = $("."+symb+" .bottom table");
+        
+        var str = 
+            '<tbody>\
+                <tr class="imp_line">\
+                    <th>'+data[i][0]['date']+'</th>\
+                    <th>'+data[i][0]['price']+'</th>\
+                    <th>=</th>\
+                </tr>\
+                <tr>\
+                    <th>'+data[i][1]['date']+'</th>\
+                    <th>'+data[i][1]['price']+'</th>\
+                    <th>'+data[i][0]['one_two']+'</th>\
+                </tr>\
+                <tr>\
+                    <th>'+data[i][2]['date']+'</th>\
+                    <th>'+data[i][2]['price']+'</th>\
+                    <th>'+data[i][0]['two_three']+'</th>\
+                </tr>\
+                <tr>\
+                    <th>'+data[i][3]['date']+'</th>\
+                    <th>'+data[i][3]['price']+'</th>\
+                    <th>'+data[i][0]['three_four']+'</th>\
+                </tr>\
+                <tr>\
+                    <th>'+data[i][4]['date']+'</th>\
+                    <th>'+data[i][4]['price']+'</th>\
+                    <th>'+data[i][0]['four_five']+'</th>\
+                </tr>\
+                <tr>\
+                    <th>'+data[i][5]['date']+'</th>\
+                    <th>'+data[i][5]['price']+'</th>\
+                    <th>'+data[i][0]['five_six']+'</th>\
+                </tr>\
+                <tr>\
+                    <th>'+data[i][6]['date']+'</th>\
+                    <th>'+data[i][6]['price']+'</th>\
+                    <th>'+data[i][0]['six_seven']+'</th>\
+                </tr>\
+                <tr>\
+                    <th>'+data[i][7]['date']+'</th>\
+                    <th>'+data[i][7]['price']+'</th>\
+                    <th>'+data[i][0]['seven_eight']+'</th>\
+                </tr>\
+                <tr>\
+                    <th>'+data[i][8]['date']+'</th>\
+                    <th>'+data[i][8]['price']+'</th>\
+                    <th>'+data[i][0]['eight_nine']+'</th>\
+                </tr>\
+                <tr>\
+                    <th>'+data[i][9]['date']+'</th>\
+                    <th>'+data[i][9]['price']+'</th>\
+                    <th>'+data[i][0]['nine_ten']+'</th>\
+                </tr>\
+                <tr>\
+                    <th>'+data[i][10]['date']+'</th>\
+                    <th>'+data[i][10]['price']+'</th>\
+                    <th>'+data[i][0]['ten_eleven']+'</th>\
+                </tr>\
+                <tr>\
+                    <th>'+data[i][11]['date']+'</th>\
+                    <th>'+data[i][11]['price']+'</th>\
+                    <th>'+data[i][0]['eleven_twelve']+'</th>\
+                </tr>\
+            </tbody>';
+        symb_area.append(str);
     }
 }
 function get_use_symb(use)
