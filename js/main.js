@@ -18,6 +18,13 @@ var compare_list = [
 ];
 var switch_man = 0;
 
+setInterval(function() {
+    if(switch_man === 1)
+    {
+        make_symb_master();
+    }
+ }, 300000);
+
 $(document).ready(function ()
 {
     var data_on_button = $('.data-get');
@@ -70,7 +77,9 @@ function make_symb_master()
 
 function make_select_symb_area(data)
 {
+    var arr_clean = [];
     var select_area = $('.select-symbol');
+    select_area.empty();
     var all_data = data['all'];
     var check_data = data['use'];
     for(var i=0; i<all_data.length; i++)
@@ -82,7 +91,6 @@ function make_select_symb_area(data)
             ';
         select_area.append(str);
     }
-
     for(var i=0; i<check_data.length; i++)
     {
         var symb = check_data[i]['english_name'].replace(/(\s*)/g, "");
@@ -90,8 +98,14 @@ function make_select_symb_area(data)
         $('.'+symb+'').addClass('check-active');
         //check_list.push([symb, key_symb]);
         check_list.push(key_symb);
-
     }
+    check_list.forEach((element)=>{
+        if(!arr_clean.includes(element))
+        {
+            arr_clean.push(element);
+        }
+    })
+    check_list = arr_clean;
     $('.select-symbol .items').click(function ()
     {
         var check_bol = check_list.includes($(this).data('symb'));
@@ -130,6 +144,7 @@ function make_select_symb_area(data)
                 check_list.push($(this).data('symb'));
                 user_add_symbol();
                 //data restart
+
             }
         }
     })
@@ -159,6 +174,7 @@ function make_use_symb_area(data)
                                 <th>등락률</th>\
                             </tr>\
                         </thead>\
+                        <tbody></tbody>\
                     </table>\
                 </div>\
             </div>';
@@ -170,78 +186,147 @@ function make_use_symb_area(data)
 
 function make_use_symb_bottom_area(data)
 {   
-    console.log('data', data);
-    //2022.01.16 여기서부터 이제 데이터 영역 꾸리면 됨.
     for(var i in data)
     {
-        var symb = data[i][0]['symb'];
-        var symb_area = $("."+symb+" .bottom table");
-        
-        var str = 
-            '<tbody>\
-                <tr class="imp_line">\
-                    <th>'+data[i][0]['date']+'</th>\
-                    <th>'+data[i][0]['price']+'</th>\
+        var symb = data[i];
+        var symb_area = $("."+symb[0]['symb']+" .bottom table tbody");
+        for(var j=0; j<symb.length; j++)
+        {
+            if(j === 0)
+            {
+                var str = 
+                '<tr class="imp_line">\
+                    <th>'+symb[j]['date']+'</th>\
+                    <th>'+symb[j]['price']+'</th>\
                     <th>=</th>\
-                </tr>\
-                <tr>\
-                    <th>'+data[i][1]['date']+'</th>\
-                    <th>'+data[i][1]['price']+'</th>\
-                    <th>'+data[i][0]['one_two']+'</th>\
-                </tr>\
-                <tr>\
-                    <th>'+data[i][2]['date']+'</th>\
-                    <th>'+data[i][2]['price']+'</th>\
-                    <th>'+data[i][0]['two_three']+'</th>\
-                </tr>\
-                <tr>\
-                    <th>'+data[i][3]['date']+'</th>\
-                    <th>'+data[i][3]['price']+'</th>\
-                    <th>'+data[i][0]['three_four']+'</th>\
-                </tr>\
-                <tr>\
-                    <th>'+data[i][4]['date']+'</th>\
-                    <th>'+data[i][4]['price']+'</th>\
-                    <th>'+data[i][0]['four_five']+'</th>\
-                </tr>\
-                <tr>\
-                    <th>'+data[i][5]['date']+'</th>\
-                    <th>'+data[i][5]['price']+'</th>\
-                    <th>'+data[i][0]['five_six']+'</th>\
-                </tr>\
-                <tr>\
-                    <th>'+data[i][6]['date']+'</th>\
-                    <th>'+data[i][6]['price']+'</th>\
-                    <th>'+data[i][0]['six_seven']+'</th>\
-                </tr>\
-                <tr>\
-                    <th>'+data[i][7]['date']+'</th>\
-                    <th>'+data[i][7]['price']+'</th>\
-                    <th>'+data[i][0]['seven_eight']+'</th>\
-                </tr>\
-                <tr>\
-                    <th>'+data[i][8]['date']+'</th>\
-                    <th>'+data[i][8]['price']+'</th>\
-                    <th>'+data[i][0]['eight_nine']+'</th>\
-                </tr>\
-                <tr>\
-                    <th>'+data[i][9]['date']+'</th>\
-                    <th>'+data[i][9]['price']+'</th>\
-                    <th>'+data[i][0]['nine_ten']+'</th>\
-                </tr>\
-                <tr>\
-                    <th>'+data[i][10]['date']+'</th>\
-                    <th>'+data[i][10]['price']+'</th>\
-                    <th>'+data[i][0]['ten_eleven']+'</th>\
-                </tr>\
-                <tr>\
-                    <th>'+data[i][11]['date']+'</th>\
-                    <th>'+data[i][11]['price']+'</th>\
-                    <th>'+data[i][0]['eleven_twelve']+'</th>\
-                </tr>\
-            </tbody>';
-        symb_area.append(str);
+                </tr>';
+                symb_area.append(str);
+            }
+            else
+            {
+                var rate = Number(symb[0][compare_list[j-1]]);
+                var color = '';
+                // if(rate > 0)
+                // {
+                //     color = 'up';
+                // }
+                // else if (rate === 0)
+                // {
+                //     color = 'same';
+                // }
+                // else if (rate < 0)
+                // {
+                //     color = 'down';
+                // }
+                if(rate >= 5)
+                {
+                    color = 'high_up';
+                }
+                else if(rate >= 1.5)
+                {
+                    color = 'up';
+                }
+                else if(rate > 0)
+                {
+                    color = 'low_up'
+                }
+                else if(rate === 0)
+                {
+                    color = 'same';
+                }
+                else if(rate < 0)
+                {
+                    color = 'low_down';
+                }
+                else if(rate <= -1.5)
+                {
+                    color = 'down';
+                }
+                else if(rate <= -5)
+                {
+                    color = 'high_down';
+                }
+                var str = 
+                '<tr>\
+                    <th>'+symb[j]['date']+'</th>\
+                    <th>'+symb[j]['price']+'</th>\
+                    <th class='+color+'>'+rate+'%</th>\
+                </tr>';
+                symb_area.append(str);
+            }
+        }
     }
+    //2022.01.16 여기서부터 이제 데이터 영역 꾸리면 됨.
+    // for(var i in data)
+    // {
+    //     var symb = data[i][0]['symb'];
+    //     var symb_area = $("."+symb+" .bottom table");
+        
+    //     var str = 
+    //         '<tbody>\
+    //             <tr class="imp_line">\
+    //                 <th>'+data[i][0]['date']+'</th>\
+    //                 <th>'+data[i][0]['price']+'</th>\
+    //                 <th>=</th>\
+    //             </tr>\
+    //             <tr>\
+    //                 <th>'+data[i][1]['date']+'</th>\
+    //                 <th>'+data[i][1]['price']+'</th>\
+    //                 <th>'+data[i][0]['one_two']+'</th>\
+    //             </tr>\
+    //             <tr>\
+    //                 <th>'+data[i][2]['date']+'</th>\
+    //                 <th>'+data[i][2]['price']+'</th>\
+    //                 <th>'+data[i][0]['two_three']+'</th>\
+    //             </tr>\
+    //             <tr>\
+    //                 <th>'+data[i][3]['date']+'</th>\
+    //                 <th>'+data[i][3]['price']+'</th>\
+    //                 <th>'+data[i][0]['three_four']+'</th>\
+    //             </tr>\
+    //             <tr>\
+    //                 <th>'+data[i][4]['date']+'</th>\
+    //                 <th>'+data[i][4]['price']+'</th>\
+    //                 <th>'+data[i][0]['four_five']+'</th>\
+    //             </tr>\
+    //             <tr>\
+    //                 <th>'+data[i][5]['date']+'</th>\
+    //                 <th>'+data[i][5]['price']+'</th>\
+    //                 <th>'+data[i][0]['five_six']+'</th>\
+    //             </tr>\
+    //             <tr>\
+    //                 <th>'+data[i][6]['date']+'</th>\
+    //                 <th>'+data[i][6]['price']+'</th>\
+    //                 <th>'+data[i][0]['six_seven']+'</th>\
+    //             </tr>\
+    //             <tr>\
+    //                 <th>'+data[i][7]['date']+'</th>\
+    //                 <th>'+data[i][7]['price']+'</th>\
+    //                 <th>'+data[i][0]['seven_eight']+'</th>\
+    //             </tr>\
+    //             <tr>\
+    //                 <th>'+data[i][8]['date']+'</th>\
+    //                 <th>'+data[i][8]['price']+'</th>\
+    //                 <th>'+data[i][0]['eight_nine']+'</th>\
+    //             </tr>\
+    //             <tr>\
+    //                 <th>'+data[i][9]['date']+'</th>\
+    //                 <th>'+data[i][9]['price']+'</th>\
+    //                 <th>'+data[i][0]['nine_ten']+'</th>\
+    //             </tr>\
+    //             <tr>\
+    //                 <th>'+data[i][10]['date']+'</th>\
+    //                 <th>'+data[i][10]['price']+'</th>\
+    //                 <th>'+data[i][0]['ten_eleven']+'</th>\
+    //             </tr>\
+    //             <tr>\
+    //                 <th>'+data[i][11]['date']+'</th>\
+    //                 <th>'+data[i][11]['price']+'</th>\
+    //                 <th>'+data[i][0]['eleven_twelve']+'</th>\
+    //             </tr>\
+    //         </tbody>';
+    //     symb_area.append(str);
+    // }
 }
 function get_use_symb(use)
 {
@@ -268,7 +353,6 @@ function user_add_symbol()
             data : click_symb
         },success : function (respon)
         {
-            //console.log('respon', respon);
         }
     })
 }
@@ -424,7 +508,6 @@ function get_data_coin()
 
     // });
     // var obj = JSON.parse(request.responseText);
-    // console.log(obj);
     for(var i=0; i<g_symb.length; i++)
     {
         for(var j=0; j<g_time.length; j++)

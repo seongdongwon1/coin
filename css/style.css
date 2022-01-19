@@ -130,6 +130,12 @@ body
     font-weight: 600;
 }
 
+.mid .alarm
+{
+    width : 100%;
+    height : 30px;
+    background-color: #142c67;
+}
 .mid .mid-area-use
 {
     width : 100%;
@@ -149,7 +155,7 @@ body
 .mid .mid-area-use .use-border .items
 {
     width: 340px;
-    height: 650px;
+    height: 700px;
     border: 3px solid #142c67;
     border-radius: 10px;
     margin: 1px;
@@ -237,8 +243,13 @@ body
     height : 40px;
     text-align: center;
     border : 1px solid;
+    font-weight: 600;
 }
 
+tr:hover
+{
+    background-color : rgb(173, 171, 171);
+}
 .mid .mid-area-use .use-border .items .bottom table tbody .imp_line
 {
     background-color : #142c67;
@@ -246,16 +257,41 @@ body
     font-weight: 600;
 }
 
-.mid .mid-area-use .use-border .items .bottom table tbody tr .up
+.mid .mid-area-use .use-border .items .bottom table tbody tr .high_up
 {
     background-color: red;
+    color : white;
+}
+
+.mid .mid-area-use .use-border .items .bottom table tbody tr .up
+{
+    background-color: rgb(255, 38, 38);
+    color : white;
+}
+
+.mid .mid-area-use .use-border .items .bottom table tbody tr .low_up
+{
+    background-color: rgb(248, 79, 79);
+    color : white;
+}
+
+.mid .mid-area-use .use-border .items .bottom table tbody tr .high_down
+{
+    background-color: blue;
+    color : white;
 }
 
 .mid .mid-area-use .use-border .items .bottom table tbody tr .down
 {
-    background-color: blue;
+    background-color: rgb(32, 32, 250);
+    color : white;
 }
 
+.mid .mid-area-use .use-border .items .bottom table tbody tr .low_down
+{
+    background-color: rgb(69, 69, 252);
+    color : white;
+}
 /* bottom */
 .bottom
 {
